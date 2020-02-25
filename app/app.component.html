@@ -1,0 +1,691 @@
+<div class="jumbotron customJumbotron card">
+  	<div class="header card-2 top-header-responsive">
+      <div class="mx-auto w-75">
+        <h3 id="title" class="title card"> Primerjalni izračun stroškov ogrevanja in emisij CO <sub>2</sub></h3>
+      </div>
+    </div>
+
+	<ul class="flex-container_selection">
+		<li class="flex-item_icons">
+			<div (click)="building_select()" id="icons_div">
+				<!-- <i class="material-icons customButton" id="icons">home</i> -->
+        <p class="perspective">
+					<button class="btn btn-8 btn-8c card-btn {{card_btn_active_home}}"><i class="material-icons " id="icons">home</i></button>
+				</p>
+      </div>
+      <hr class="line-2">
+			<span class="iconText">Izračun na
+        osnovi podatkov o vašem objektu<br>(izolacija, površina, uporabniki) </span>
+		<li class="flex-item_icons">
+			<div (click)="consumption_select()" id="icons_div">
+				<!-- <i class="material-icons" id="icons">whatshot</i> -->
+         <p class="perspective">
+					<button class="btn btn-8 btn-8c card-btn {{card_btn_active_consumption}}"><i class="material-icons" id="icons">whatshot</i> </button>
+				</p>
+			</div>
+      <hr class="line-2">
+			<span class="iconText">Ocena na osnovi obstoječega ogrevalnega sistema<br>(povprečna letna poraba
+        goriva)</span>
+		</li>
+	</ul>
+</div>
+<div class="jumbotron customJumbotron2">
+	<!--Region selector-->
+  <div class="container form-top-container">
+          <div id="padding_top_18">
+        <div id="text_center"  class="form-top-header">
+          <span>Izberite regijo, kjer se nahaja objekt</span>
+          <div id="select_region">
+            <select (change)="region_select()" [(ngModel)]="region" [value]="region" class="form-control" name="region">
+              <option value="0">Primorska</option>
+              <option value="1">Notranjska</option>
+              <option value="2">Koroška</option>
+              <option value="3">Prekmurje</option>
+              <option value="4">Štajerska</option>
+              <option value="5">Dolenjska</option>
+              <option value="6">Gorenjska</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+    <div *ngIf="consumption === true" id="padding_top_10">
+        <div class="jumbotron big-form-jumotron-2">
+          <div class="row">
+          <div class="col-md-1" id="padding_top_10">
+
+          </div>
+          <div class="col-md-4" id="padding_top_10">
+            <div class="jumbotron formJumbotron">
+              <div id="text_center" class="formHeader">
+                <h4><b>Poraba goriva</b></h4>
+              </div>
+              <div class="jumbotron form-container">
+                   <ul class="flex-container">
+                      <li class="flex-item_name">
+                        <span>Kurilno olje (l):</span>
+                      </li>
+                      <li class="flex-item_input">
+                        <input type="number" min="0" placeholder="0" [(ngModel)]="quantity_oil"
+                          [ngModelOptions]="{standalone: true}" name="quantity_oil" max="99999" class="form-control">
+                      </li>
+                    </ul>
+                    <ul class="flex-container">
+                      <li class="flex-item_name">
+                        <span>Zemeljski plin (m<sup>3</sup>):</span>
+                      </li>
+                      <li class="flex-item_input">
+                        <input type="number" min="0" placeholder="0" [(ngModel)]="quantity_gas"
+                          [ngModelOptions]="{standalone: true}" name="quantity_gas" max="999999" class="form-control">
+                      </li>
+                    </ul>
+                    <ul class="flex-container">
+                      <li class="flex-item_name">
+                        <span>Utekočinjen naftni plin (l):</span>
+                      </li>
+                      <li class="flex-item_input">
+                        <input type="number" min="0" placeholder="0" [(ngModel)]="quantity_lpg"
+                          [ngModelOptions]="{standalone: true}" name="quantity_lpg" max="999999" class="form-control">
+                      </li>
+                    </ul>
+                    <ul class="flex-container">
+                      <li class="flex-item_name">
+                        <span>Peleti (kg):</span>
+                      </li>
+                      <li class="flex-item_input">
+                        <input type="number" min="0" placeholder="0" [(ngModel)]="quantity_pelets"
+                          [ngModelOptions]="{standalone: true}" name="quantity_pelets" max="999999" class="form-control">
+                      </li>
+                    </ul>
+                    <ul class="flex-container">
+                      <li class="flex-item_name">
+                        <span>Drva (m<sup>3</sup>):</span>
+                      </li>
+                      <li class="flex-item_input">
+                        <input type="number" min="0" placeholder="0" [(ngModel)]="quantity_wood"
+                          [ngModelOptions]="{standalone: true}" name="quantity_wood" max="999999" class="form-control">
+                      </li>
+                    </ul>
+                    <ul class="flex-container">
+                      <li class="flex-item_name">
+                        <span>Električni grelec (kW):</span>
+                      </li>
+                      <li class="flex-item_input">
+                        <input type="number" min="0" placeholder="0" [(ngModel)]="quantity_el_heater"
+                          [ngModelOptions]="{standalone: true}" name="quantity_el_heater" max="9999" class="form-control">
+                      </li>
+                    </ul>
+                    <ul class="flex-container">
+                      <li class="flex-item_name">
+                        <i class="material-icons">subdirectory_arrow_right</i>
+                        <span>Delež porabe grelca (%):</span>
+                      </li>
+                      <li class="flex-item_input">
+                        <select [(ngModel)]="percent_el_heater" class="form-control" name="percent_el_heater">
+                          <option value="0">0</option>
+                          <option value="10">10</option>
+                          <option value="20">20</option>
+                          <option value="30">30</option>
+                          <option value="40">40</option>
+                          <option value="50">50</option>
+                          <option value="60">60</option>
+                          <option value="70">70</option>
+                          <option value="80">80</option>
+                          <option value="90">90</option>
+                          <option value="100">100</option>
+                        </select>
+                      </li>
+                    </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2" id="padding_top_10">
+
+          </div>
+          <div class="col-md-4" id="padding_top_10">
+           <div class="jumbotron formJumbotron">
+              <div id="text_center" class="formHeader">
+              <h4><b>Podatki o objektu</b></h4>
+            </div>
+            <div class="jumbotron form-container">
+                  <ul class="flex-container">
+                    <li class="flex-item_name">
+                      <span>Ogrevana površina (m<sup>2</sup>):</span>
+                    </li>
+                    <li class="flex-item_input">
+                      <input type="number" min="0" placeholder="surface_heated" [(ngModel)]="surface_heated"
+                        [ngModelOptions]="{standalone: true}" name="surface_heated" max="999" class="form-control">
+                    </li>
+                  </ul>
+                  <ul class="flex-container">
+                    <li class="flex-item_name">
+                      <span>Uporabniki sanitarne vode (N): </span>
+                    </li>
+                    <li class="flex-item_input">
+                      <input type="number" min="0" placeholder="domestic_hv_users" [(ngModel)]="domestic_hv_users"
+                        [ngModelOptions]="{standalone: true}" name="domestic_hv_users" max="9999" class="form-control">
+                    </li>
+                  </ul>
+                  <ul class="flex-container">
+                    <li class="flex-item_name">
+                      <span>Toplotni vir: </span>
+                    </li>
+                    <li class="flex-item_input">
+                      <select [(ngModel)]="heat_source" class="form-control" name="heat_source">
+                        <option value="0">Zunanji zrak</option>
+                        <option value="1">Zemeljski kolektor</option>
+                        <option value="2">Zemeljska sonda</option>
+                        <option value="3">Podtalnica</option>
+                      </select>
+                    </li>
+                  </ul>
+                  <ul class="flex-container">
+                    <li class="flex-item_name">
+                      <span>Ogrevalni sistem: </span>
+                    </li>
+                    <li class="flex-item_input">
+                      <select [(ngModel)]="heat_system" class="form-control" name="heat_system">
+                        <option value="0">Radiatorji</option>
+                        <option value="1">Talno gretje</option>
+                        <option value="2">Stensko gretje</option>
+                        <option value="3">Konvektorji</option>
+                      </select>
+                    </li>
+                  </ul>
+                  <ul class="flex-container">
+                    <li class="flex-item_name">
+                      <span>Letno ogrevalnih ur: </span>
+                    </li>
+                    <li class="flex-item_input">
+                      <select [(ngModel)]="heating_hours" [value]="1900" class="form-control" name="heating_hours">
+                        <option value="1600">Primorska (1600)</option>
+                        <option value="1800">Notranjska (1800)</option>
+                        <option value="1800">Koroška (1800)</option>
+                        <option value="1850">Prekmurje (1850)</option>
+                        <option value="1900">Štajerska (1900)</option>
+                        <option value="1950">Dolenjska (1950)</option>
+                        <option value="2050">Gorenjska (2050)</option>
+                        <option value="1">Poljubno</option>
+                      </select>
+                    </li>
+                  </ul>
+                  <ul *ngIf="heating_hours === '1'" class="flex-container">
+                    <li class="flex-item_name">
+                      <span>Letno ogrevalnih ur: </span>
+                    </li>
+                    <li class="flex-item_input">
+                      <input type="number" placeholder="0" [(ngModel)]="heating_hours_custom"
+                        [ngModelOptions]="{standalone: true}" name="heating_hours_custom" max="9999" class="form-control">
+                    </li>
+                  </ul>
+            </div>
+           </div>
+          </div>
+          </div>
+        </div>
+        <div class="col-md-1" id="padding_top_10">
+
+        </div>
+      </div>
+      <div *ngIf="building === true" id="padding_top_10">
+        <div class="row">
+          <div class="col align-self-center">
+              <div class="jumbotron big-form-jumotron">
+                     <div class="formHeader-2 ">
+                        <ul class="flex-container_building ">
+                        <li class="flex-item_centered">
+                          <span><b>Podatki o objektu</b></span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="jumbotron formJumbotron-2">   
+                        <ul class="flex-container_building">
+                        <li class="flex-item_left">
+                          <span *ngIf="!smallScreen">Specifične toplotne izgube (W/m<sup>2</sup>):</span>
+                          <span *ngIf="smallScreen">Spec. toplotne izgube (W/m<sup>2</sup>):</span>
+                        </li>
+                        <!--<li class="flex-item_input">
+                          <input type="number" min="0" placeholder="heat_losses" [(ngModel)]="heat_losses"
+                            [ngModelOptions]="{standalone: true}" name="heat_losses" max="999" class="form-control">
+                        </li>-->
+                        <li class="flex-item_right">
+                          <select [(ngModel)]="heat_losses" class="form-control" name="heat_losses">
+                            <option value="15">15 - PASIVNA HIŠA</option>
+                            <option value="25">25 - NIZKOENERGIJSKA HIŠA</option>
+                            <option value="50">50 - NOVOGRADNJA Z ZELO DOBRO IZOLACIJO</option>
+                            <option value="60">60 - NOVOGRADNJA Z DOBRO IZOLACIJO</option>
+                            <option value="75">75 - NOVOGRADNJA Z MINIMALNO IZOLACIJO</option>
+                            <option value="80">80 - STAROGRADNJA Z OBIČAJNO IZOLACIJO</option>
+                            <option value="85">85 - GRADNJA PO LETU 1980 Z MINIMALNO IZOLACIJO</option>
+                            <option value="110">110 STAREJŠI OBJEKT BREZ IZOLACIJE</option>
+                            <option value="1">Poljubno</option>
+                          </select>
+                        </li>
+                      </ul>
+                      <ul *ngIf="heat_losses === '1'" class="flex-container_building">
+                        <li class="flex-item_left">
+                          <span><b>Vnesite toplotne izgube (kW/m²):</b></span>
+                        </li>
+                        <li class="flex-item_right">
+                          <input type="number" placeholder="0" [(ngModel)]="heat_losses_custom" [ngModelOptions]="{standalone: true}"
+                            name="heat_losses_custom" max="9999" class="form-control">
+                        </li>
+                      </ul>
+                      <ul *ngIf="heat_losses === 15 || heat_losses === '15'" class="flex-container_building">
+                        <li class="flex-item_descr_ins">
+                          <div>
+                            <span><u>Pasivna hiša:</u><br>
+                              - opečni zidak debeline min. 29 cm ali drugo<br>
+                              - min. 35 cm izolacije zunanjih zidov<br>
+                              - min. 40 cm izolacije strehe<br>
+                              - koeficient toplotne prevodnosti oken do 0,8
+                            </span>
+                          </div>
+                        </li>
+                      </ul>
+                      <ul *ngIf="heat_losses === 25 || heat_losses === '25'" class="flex-container_building">
+                        <li class="flex-item_descr_ins">
+                          <div>
+                            <span><u>Nizkoenergijska hiša:</u><br>
+                              - opečni zidak debeline min. 29 cm<br>
+                              - min. 20 cm izolacije zunanjih zidov<br>
+                              - min. 30 cm izolacije strehe<br>
+                              - koeficient toplotne prevodnosti oken do 0,8
+                            </span>
+                          </div>
+                        </li>
+                      </ul>
+                      <ul *ngIf="heat_losses === 50 || heat_losses === '50'" class="flex-container_building">
+                        <li class="flex-item_descr_ins">
+                          <div>
+                            <span><u>Novogradnja z zelo dobro izolacijo:</u><br>
+                              - opečni zidak debeline min. 29 cm<br>
+                              - min. 15 cm izolacije zunanjih zidov<br>
+                              - min. 25 cm izolacije strehe<br>
+                              - koeficient toplotne prevodnosti oken do 1,0
+                            </span>
+                          </div>
+                        </li>
+                      </ul>
+                      <ul *ngIf="heat_losses === 60 || heat_losses === '60'" class="flex-container_building">
+                        <li class="flex-item_descr_ins">
+                          <div>
+                            <span><u>Novogradnja z dobro izolacijo:</u><br>
+                              - opečni zidak debeline min. 29 cm<br>
+                              - min. 8 cm izolacije zunanjih zidov<br>
+                              - min. 20 cm izolacije strehe<br>
+                              - koeficient toplotne prevodnosti oken do 1,1
+                            </span>
+                          </div>
+                        </li>
+                      </ul>
+                      <ul *ngIf="heat_losses === 75 || heat_losses === '75'" class="flex-container_building">
+                        <li class="flex-item_descr_ins">
+                          <div>
+                            <span><u>Novogradnja z minimalno izolacijo:</u><br>
+                              - opečni zidak debeline min. 29 cm<br>
+                              - min. 10 cm izolacije strehe<br>
+                              - koeficient toplotne prevodnosti oken do 1,3
+                            </span>
+                          </div>
+                        </li>
+                      </ul>
+                      <ul *ngIf="heat_losses === 80 || heat_losses === '80'" class="flex-container_building">
+                        <li class="flex-item_descr_ins">
+                          <div>
+                            <span><u>Starogradnja z običajno izolacijo:</u><br>
+                              - toplotnoizolacijski omet, 3-5 cm<br>
+                              - koeficient toplotne prevodnosti oken do 1,3
+                            </span>
+                          </div>
+                        </li>
+                      </ul>
+                      <ul *ngIf="heat_losses === 85 || heat_losses === '85'" class="flex-container_building">
+                        <li class="flex-item_descr_ins">
+                          <div>
+                            <span><u>Gradnja po letu 1980 z minimalno izolacijo:</u><br>
+                              - toplotnoizolacijski omet, 3-5 cm<br>
+                              - koeficient toplotne prevodnosti oken do 1,5
+                            </span>
+                          </div>
+                        </li>
+                      </ul>
+                      <ul *ngIf="heat_losses === 110 || heat_losses === '110'" class="flex-container_building">
+                        <li class="flex-item_descr_ins">
+                          <div>
+                            <span><u>Starejši objekt brez izolacije</u><br>
+                              - debele stene, od 40 cm<br>
+                              - koeficient toplotne prevodnosti oken do 1,5
+                            </span>
+                          </div>
+                        </li>
+                      </ul>
+                      <ul class="flex-container_building">
+                        <li class="flex-item_left">
+                          <span>Ogrevana površina (m<sup>2</sup>):</span>
+                        </li>
+                        <li class="flex-item_right">
+                          <input type="number" min="0" placeholder="surface_heated" [(ngModel)]="surface_heated"
+                            [ngModelOptions]="{standalone: true}" name="surface_heated" class="form-control">
+                        </li>
+                      </ul>
+                      <ul class="flex-container_building">
+                        <li class="flex-item_left">
+                          <span>Uporabniki sanitarne vode (N): </span>
+                        </li>
+                        <li class="flex-item_right">
+                          <input type="number" min="0" placeholder="domestic_hv_users" [(ngModel)]="domestic_hv_users"
+                            [ngModelOptions]="{standalone: true}" name="domestic_hv_users" max="9999" class="form-control">
+                        </li>
+                      </ul>
+                      <ul class="flex-container_building">
+                        <li class="flex-item_left">
+                          <span>Toplotni vir: </span>
+                        </li>
+                        <li class="flex-item_right">
+                          <select [(ngModel)]="heat_source" class="form-control" name="heat_source">
+                            <option value="0">Zunanji zrak</option>
+                            <option value="1">Zemeljski kolektor</option>
+                            <option value="2">Zemeljska sonda</option>
+                            <option value="3">Podtalnica</option>
+                          </select>
+                        </li>
+                      </ul>
+                      <ul class="flex-container_building">
+                        <li class="flex-item_left">
+                          <span>Ogrevalni sistem: </span>
+                        </li>
+                        <li class="flex-item_right">
+                          <select [(ngModel)]="heat_system" class="form-control" name="heat_system">
+                            <option value="0">Radiatorji</option>
+                            <option value="1">Talno gretje</option>
+                            <option value="2">Stensko gretje</option>
+                            <option value="3">Konvektorji</option>
+                          </select>
+                        </li>
+                      </ul>
+                      <ul class="flex-container_building">
+                        <li class="flex-item_left">
+                          <span>Letno ogrevalnih ur: </span>
+                        </li>
+                        <li class="flex-item_right">
+                          <select [(ngModel)]="heating_hours" [value]="1900" class="form-control" name="heating_hours">
+                            <option value="1800">Notranjska (1800)</option>
+                            <option value="1800">Koroška (1800)</option>
+                            <option value="1850">Prekmurje (1850)</option>
+                            <option value="1900">Štajerska (1900)</option>
+                            <option value="1950">Dolenjska (1950)</option>
+                            <option value="2050">Gorenjska (2050)</option>
+                            <option value="1">Poljubno</option>
+                          </select>
+                        </li>
+                      </ul>
+                      <ul *ngIf="heating_hours === '1'" class="flex-container_building">
+                        <li class="flex-item_left">
+                          <span><b>Vnesite ure (min. 300):</b></span>
+                        </li>
+                        <li class="flex-item_right">
+                          <input type="number" placeholder="300" [(ngModel)]="heating_hours_custom"
+                            [ngModelOptions]="{standalone: true}" name="heating_hours_custom" max="9999" class="form-control">
+                        </li>
+                      </ul>
+                    </div>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      
+              <!--ENERGENT PRICES-->
+        <div *ngIf="prices === true" class="jumbotron big-form-jumotron-3">
+          <div class="row">
+          <div class="ml-5" id="">
+          </div>
+          <div class="col-lg-3 col-md-12 col-sm-12" id="padding_top_10">
+            <div id="text_center " class="formHeader">
+              <h4><b>Cene energentov</b></h4>
+            </div>
+            <div class="jumbotron formJumbotron-3">
+                <ul class="flex-container">
+              <li class="flex-item_name">
+                <span>Elektrika ET ({{ currency }}/kWh):</span>
+              </li>
+              <li class="flex-item_input">
+                <input type="number" min="0" placeholder="price_elec" [(ngModel)]="price_elec"
+                  [ngModelOptions]="{standalone: true}" name="price_elec" max="9999" class="form-control">
+              </li>
+            </ul>
+            <ul class="flex-container">
+              <li class="flex-item_name">
+                <span>Ekstra lahko kurilno olje ({{ currency }}/l):</span>
+              </li>
+              <li class="flex-item_input">
+                <input type="number" min="0" placeholder="price_oil" [(ngModel)]="price_oil"
+                  [ngModelOptions]="{standalone: true}" name="price_oil" max="9999" class="form-control">
+              </li>
+            </ul>
+            <ul class="flex-container">
+              <li class="flex-item_name">
+                <span>Zemeljski plin ({{ currency }}/m<sup>3</sup>):</span>
+              </li>
+              <li class="flex-item_input">
+                <input type="number" min="0" placeholder="price_gas" [(ngModel)]="price_gas"
+                  [ngModelOptions]="{standalone: true}" name="price_gas" max="9999" class="form-control">
+              </li>
+            </ul>
+            <ul class="flex-container">
+              <li class="flex-item_name">
+                <span>Utekočinjen naftni plin ({{ currency }}/l):</span>
+              </li>
+              <li class="flex-item_input">
+                <input type="number" min="0" placeholder="price_lpg" [(ngModel)]="price_lpg"
+                  [ngModelOptions]="{standalone: true}" name="price_lpg" max="9999" class="form-control">
+              </li>
+            </ul>
+            <ul class="flex-container">
+              <li class="flex-item_name">
+                <span>Peleti ({{ currency }}/kg):</span>
+              </li>
+              <li class="flex-item_input">
+                <input type="number" min="0" placeholder="price_pelets" [(ngModel)]="price_pelets"
+                  [ngModelOptions]="{standalone: true}" name="price_pelets" max="9999" class="form-control">
+              </li>
+            </ul>
+            <ul class="flex-container">
+              <li class="flex-item_name">
+                <span>Drva ({{ currency }}/m<sup>3</sup>):</span>
+              </li>
+              <li class="flex-item_input">
+                <input type="number" min="0" placeholder="price_wood" [(ngModel)]="price_wood"
+                  [ngModelOptions]="{standalone: true}" name="price_wood" max="9999" class="form-control">
+              </li>
+            </ul>
+            </div>
+          </div>
+          <!--CALORIFIC VALUE-->
+          <div class="ml-5" id="padding_top_10">
+          </div>
+
+          <div class="col-lg-3 col-md-12 col-sm-12" id="padding_top_10">
+            <div id="text_center" class="formHeader text-center">
+              <h4><b>Kurilna vrednost</b></h4>
+            </div>
+            <div class="jumbotron formJumbotron-3">
+                   <ul class="flex-container">
+              <li class="flex-item_name">
+                <p *ngIf="!smallScreen" style="line-height:20px;"><br></p>
+              </li>
+            </ul>
+            <ul class="flex-container">
+              <li class="flex-item_name">
+                <span>Ekstra lahko kurilno olje (kWh/l):</span>
+              </li>
+              <li class="flex-item_input">
+                <input type="number" min="0" placeholder="calorific_val_oil" [(ngModel)]="calorific_val_oil"
+                  [ngModelOptions]="{standalone: true}" name="calorific_val_oil" max="9999" class="form-control">
+              </li>
+            </ul>
+            <ul class="flex-container">
+              <li class="flex-item_name">
+                <span>Zemeljski plin (kWh/l):</span>
+              </li>
+              <li class="flex-item_input">
+                <input type="number" min="0" placeholder="calorific_val_gas" [(ngModel)]="calorific_val_gas"
+                  [ngModelOptions]="{standalone: true}" name="calorific_val_gas" max="9999" class="form-control">
+              </li>
+            </ul>
+            <ul class="flex-container">
+              <li class="flex-item_name">
+                <span>Utekočinjen naftni plin (kWh/m<sup>3</sup>):</span>
+              </li>
+              <li class="flex-item_input">
+                <input type="number" min="0" placeholder="calorific_val_lpg" [(ngModel)]="calorific_val_lpg"
+                  [ngModelOptions]="{standalone: true}" name="calorific_val_lpg" max="9999" class="form-control">
+              </li>
+            </ul>
+            <ul class="flex-container">
+              <li class="flex-item_name">
+                <span>Peleti (kWh/kg):</span>
+              </li>
+              <li class="flex-item_input">
+                <input type="number" min="0" placeholder="calorific_val_pelets" [(ngModel)]="calorific_val_pelets"
+                  [ngModelOptions]="{standalone: true}" name="calorific_val_pelets" max="9999" class="form-control">
+              </li>
+            </ul>
+            <ul class="flex-container">
+              <li class="flex-item_name">
+                <span>Drva (kWh/m<sup>3</sup>):</span>
+              </li>
+              <li class="flex-item_input">
+                <input type="number" min="0" placeholder="calorific_val_wood" [(ngModel)]="calorific_val_wood"
+                  [ngModelOptions]="{standalone: true}" name="calorific_val_wood" max="9999" class="form-control">
+              </li>
+            </ul>
+           
+            </div>
+            
+          </div>
+          <!--EFFICIENCY-->
+          <div class="ml-5" id="padding_top_10">
+          </div>
+          <div class="col-lg-3 col-md-12 col-sm-12" id="padding_top_10">
+            <div id="text_center" class="formHeader text-center">
+              <h4><b>Izkoristek kurilne naprave</b></h4>
+            </div>
+            <div class="jumbotron formJumbotron-4">
+                     <ul class="flex-container">
+              <li class="flex-item_space">
+              </li>
+            </ul>
+            <ul class="flex-container">
+              <li class="flex-item_centered">
+                <div id="padding_top_18">
+                  <span>(%)</span>
+                </div>
+              </li>
+              <li class="flex-item_input">
+                <div id="text_center">
+                  <span>Zimski</span>
+                </div>
+                <input type="number" min="0" placeholder="efficiency_w_oil" [(ngModel)]="efficiency_w_oil"
+                  [ngModelOptions]="{standalone: true}" name="efficiency_w_oil" max="999" class="form-control">
+              </li>
+              <li class="flex-item_input">
+                <div id="text_center">
+                  <span>Poletni*</span>
+                </div>
+                <input type="number" min="0" placeholder="efficiency_s_oil" [(ngModel)]="efficiency_s_oil"
+                  [ngModelOptions]="{standalone: true}" name="efficiency_s_oil" max="999" class="form-control">
+              </li>
+            </ul>
+            <ul class="flex-container">
+              <li class="flex-item_centered">
+                <span>(%)</span>
+              </li>
+              <li class="flex-item_input">
+                <input type="number" min="0" placeholder="efficiency_w_gas" [(ngModel)]="efficiency_w_gas"
+                  [ngModelOptions]="{standalone: true}" name="efficiency_w_gas" max="999" class="form-control">
+              </li>
+              <li class="flex-item_input">
+                <input type="number" min="0" placeholder="efficiency_s_gas" [(ngModel)]="efficiency_s_gas"
+                  [ngModelOptions]="{standalone: true}" name="efficiency_s_gas" max="999" class="form-control">
+              </li>
+            </ul>
+            <ul class="flex-container">
+              <li class="flex-item_centered">
+                <span>(%)</span>
+              </li>
+              <li class="flex-item_input">
+                <input type="number" min="0" placeholder="efficiency_w_lpg" [(ngModel)]="efficiency_w_lpg"
+                  [ngModelOptions]="{standalone: true}" name="efficiency_w_lpg" max="999" class="form-control">
+              </li>
+              <li class="flex-item_input">
+                <input type="number" min="0" placeholder="efficiency_s_lpg" [(ngModel)]="efficiency_s_lpg"
+                  [ngModelOptions]="{standalone: true}" name="efficiency_s_lpg" max="999" class="form-control">
+              </li>
+            </ul>
+            <ul class="flex-container">
+              <li class="flex-item_centered">
+                <span>(%)</span>
+              </li>
+              <li class="flex-item_input">
+                <input type="number" min="0" placeholder="efficiency_w_pelets" [(ngModel)]="efficiency_w_pelets"
+                  [ngModelOptions]="{standalone: true}" name="efficiency_w_pelets" max="999" class="form-control">
+              </li>
+              <li class="flex-item_input">
+                <input type="number" min="0" placeholder="efficiency_s_pelets" [(ngModel)]="efficiency_s_pelets"
+                  [ngModelOptions]="{standalone: true}" name="efficiency_s_pelets" max="999" class="form-control">
+              </li>
+            </ul>
+            <ul class="flex-container">
+              <li class="flex-item_centered">
+                <span>(%)</span>
+              </li>
+              <li class="flex-item_input">
+                <input type="number" min="0" placeholder="efficiency_w_wood" [(ngModel)]="efficiency_w_wood"
+                  [ngModelOptions]="{standalone: true}" name="efficiency_w_wood" max="999" class="form-control">
+              </li>
+              <li class="flex-item_input">
+                <input type="number" min="0" placeholder="efficiency_s_wood" [(ngModel)]="efficiency_s_wood"
+                  [ngModelOptions]="{standalone: true}" name="efficiency_s_wood" max="999" class="form-control">
+              </li>
+            </ul>
+            <ul class="flex-container">
+              <li class="flex-item_name">
+                <div id="text_small">
+                  <span>(* Poletni: ogrevanje sanitarne vode)</span>
+                </div>
+              </li>
+            </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <br>
+      <br>
+      <div id="stepper_next">
+        <div id="gdpr_checkbox_div">
+          <!-- <mat-checkbox color="primary" id="gdpr_checkbox"></mat-checkbox> -->
+          <span>Dovoljujem, da do preklica hranite in obdelujete moje osebne podatke za namene poslovnega
+            sodelovanja ter spremljate moje aktivnosti na spletnih straneh z namenom zagotavljanja personaliziranih
+            vsebin</span>
+        </div>
+        <div id="gdpr_text">
+          <span>Osebne podatke hranimo in obdelujemo za namene ohranjevanja stika s strankami, tržnega
+            obveščanja preko pošte, pospeševanja prodaje, profiliranja strank s ciljem prilagojene ponudbe vsebin in izdelkov
+            strankam v elektronski pošti in na spletnih straneh. Vaše podatke bomo varno hranili in z njimi spoštljivo
+            ravnali. Podatke bomo obdelovali do vašega preklica, ki ga lahko kadarkoli zahtevate preko povezave, navedene v
+            e-novicah ali pa nam zahtevo pošljete na <a href="mailto:info@termoshop.si">info@termoshop.si</a>. Za več
+            informacij o zasebnosti in varovanju
+            podatkov obiščite našo spletno stran: <a href="https://www.termoshop.si/pravno-obvestilo">https://www.termoshop.si/pravno-obvestilo</a>. S klikom
+            zgoraj dovoljujete uporabo vaših podatkov v skladu z našimi
+            pogoji.</span>
+        </div>
+      </div>
+  </div>
+
+	<button (click)="show_prices()">Show prices</button>
+
+
+</div>
